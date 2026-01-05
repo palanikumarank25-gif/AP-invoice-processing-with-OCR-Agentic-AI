@@ -1,0 +1,1001 @@
+{
+  "name": "AP invoice processing with OCR AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "invoice",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "invoice_file",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf, .jpg, .jpeg, .png, .doc, .docx",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8819e4d5-5b6e-4fb3-a6c7-0a317047821c",
+      "name": "Invoice Submission Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        10608,
+        13904
+      ],
+      "webhookId": "5078d6d3-fc28-45a2-9759-d9bbea18fcf4",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "invoice_file",
+        "options": {}
+      },
+      "id": "960a4b5d-ed40-4de0-88c7-dadcdd99f6d0",
+      "name": "Extract Text from Invoice",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        11024,
+        13904
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{$json.invoiceNumber}}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{$json.vendorName}}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-3",
+              "leftValue": "={{$json.invoiceDate}}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-4",
+              "leftValue": "={{$json.totalAmount}}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "cf0dea6e-0344-4a90-a112-1daa0405b161",
+              "leftValue": "={{$json.currency}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "9b36c044-2595-471e-b17c-60fbe6b50f6c",
+              "leftValue": "={{$json.subtotal}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c6cf9d6b-1ab1-448f-b617-0dd42d04e295",
+              "leftValue": "={{$json.taxAmount}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "7d1aa5db-4db2-40e3-a238-b9bea648d3b1",
+      "name": "Validate Invoice Data",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        14304,
+        13248
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ol4USumtz2zkI5M76sbnj5fG4_4vHXJa3T0MgwZDAx0",
+          "mode": "list",
+          "cachedResultName": "invoice_processed",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ol4USumtz2zkI5M76sbnj5fG4_4vHXJa3T0MgwZDAx0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ol4USumtz2zkI5M76sbnj5fG4_4vHXJa3T0MgwZDAx0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "invoiceNumber": "={{$json.invoiceNumber}}",
+            "vendorName": "={{$json.vendorName}}",
+            "invoiceDate": "={{$json.invoiceDate}}",
+            "subtotal": "={{$json.subtotal}}",
+            "taxAmount": "={{$json.taxAmount}}",
+            "totalAmount": "={{$json.totalAmount}}",
+            "currency": "={{$json.currency}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "invoiceNumber",
+              "displayName": "invoiceNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "vendorName",
+              "displayName": "vendorName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "invoiceDate",
+              "displayName": "invoiceDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subtotal",
+              "displayName": "subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "taxAmount",
+              "displayName": "taxAmount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "totalAmount",
+              "displayName": "totalAmount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "a0088026-cac3-48d8-9874-c3497a9b4fca",
+      "name": "Append to Invoice Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        14608,
+        13248
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GubZvG55poaWUFY3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "invoice_file",
+        "name": "={{ $json.invoiceNumber }}_{{ $json.vendorName }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1YfSdiv2hT_QolPK7944M3ptI-W1nJ8q3",
+          "mode": "list",
+          "cachedResultName": "invoice_file",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1YfSdiv2hT_QolPK7944M3ptI-W1nJ8q3"
+        },
+        "options": {}
+      },
+      "id": "cb0b3dcd-0136-4362-9290-4b9b94fda549",
+      "name": "Upload Invoice to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        12272,
+        13568
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "IRY87BPQ0xi5Hyvz",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MRL9iuhuDL7tvDKJjH27W5ZJbD_F0H0RZULOx2TB9I4",
+          "mode": "list",
+          "cachedResultName": "invoice_raw_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MRL9iuhuDL7tvDKJjH27W5ZJbD_F0H0RZULOx2TB9I4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MRL9iuhuDL7tvDKJjH27W5ZJbD_F0H0RZULOx2TB9I4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "submittedAt": "={{ new Date().toISOString() }}",
+            "fileName": "={{ $items(\"Invoice Submission Form\")[0].binary.invoice_file.fileName }}",
+            "mimeType": "={{ $items(\"Invoice Submission Form\")[0].binary.invoice_file.mimeType }}",
+            "fileSize": "={{ $items(\"Invoice Submission Form\")[0].binary.invoice_file.fileSize }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fileName",
+              "displayName": "fileName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "mimeType",
+              "displayName": "mimeType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fileSize",
+              "displayName": "fileSize",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "id": "cdcc3793-1f0c-4d47-a4d7-d891745e0e3c",
+      "name": "Store Raw Form Data",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        12608,
+        13904
+      ],
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GubZvG55poaWUFY3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-lite-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-lite-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an invoice data extraction and validation assistant.\n\nIMPORTANT RULES:\n- Extract data ONLY from the provided text.\n- DO NOT guess or infer.\n- DO NOT use prior knowledge.\n- If a value is missing, return empty string or 0.\n\nVALIDATION RULES:\n- invoiceNumber must not be empty\n- vendorName must not be empty\n- invoiceDate must not be empty\n- totalAmount must be greater than 0\n- currency must not be empty\n\nIf ALL validation rules pass:\n- set \"invoiceStatus\" = \"VALID\"\n\nIf ANY rule fails:\n- set \"invoiceStatus\" = \"INVALID\"\n\nReturn STRICT JSON only in this format:\n\n{\n  \"invoiceStatus\": \"VALID or INVALID\",\n  \"invoiceNumber\": \"\",\n  \"vendorName\": \"\",\n  \"invoiceDate\": \"\",\n  \"subtotal\": 0,\n  \"taxAmount\": 0,\n  \"totalAmount\": 0,\n  \"currency\": \"\",\n  \"validationMessage\": \"\"\n}\n\nExtract from this text:\n{{ $json.text }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "b3b5737e-d964-4811-bad3-1c183b0cff77",
+      "name": "Extract Invoice Data with AI1",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        11408,
+        13904
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rTcub0rVvcmyHvsb",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "\n# AP Invoice Processing with OCR AI Agent:",
+        "height": 80,
+        "width": 710
+      },
+      "id": "49b47a79-3364-453c-9d7a-a2dad7a7f8cd",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11280,
+        13040
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "1. A web-based online form where users upload invoice PDFs and submit them.\n\n2. Why it’s used:\nActs as the entry point of the workflow\nAccepts invoices from:\nEmployees\nVendors\nAP teams\nWorks manual uploads",
+        "height": 648,
+        "width": 262,
+        "color": 3
+      },
+      "id": "af269c1a-4ec8-47eb-a992-ea31ab27d76b",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        10528,
+        13424
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "b5016f8b-d6b2-498d-88b6-713e432b45e8",
+      "name": "Merge Invoice Data with Binary",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        11904,
+        13568
+      ]
+    },
+    {
+      "parameters": {
+        "content": "1. Extracts raw text from the uploaded PDF invoice.\n\n2. Why it’s used:\nAI cannot read PDFs directly\nConverts invoice PDF → readable text\nWorks for:\nScanned invoices (OCR)",
+        "height": 648,
+        "width": 262,
+        "color": 4
+      },
+      "id": "7841eeda-d790-4a51-a939-5b200308d182",
+      "name": "Sticky Note11",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        10928,
+        13424
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "1. Uses AI (Gemini) to understand invoice text and identify key fields.\n\n2. Why it’s used:\nInvoices vary in layout and format\nAI understands context better than rules\nExtracts fields like:\ninvoiceNumber\nvendorName\ninvoiceDate\nsubtotal\ntaxAmount\ntotalAmount\ncurrency",
+        "height": 664,
+        "width": 278,
+        "color": 6
+      },
+      "id": "a56161f6-044c-46f8-9675-44ad3fffde51",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11376,
+        13424
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Form (Form Ending – Success Page):\nThis step shows a confirmation message on the screen after the invoice form is submitted successfully.",
+        "height": 552,
+        "width": 294
+      },
+      "id": "840ccbef-facb-4674-bc4e-d1be6e7aa720",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        12960,
+        13872
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Checks whether required invoice fields are present and valid.\n\n2. Why it’s used:\nPrevents incomplete or incorrect invoices\nEnforces business rules\nAvoids bad data entering accounting systems\nValidation examples:\nInvoice number must exist\nTotal amount must be greater than zero\nCurrency must be present\n\n3. What it does:\nTRUE → valid invoice\nFALSE → invalid invoice",
+        "height": 624,
+        "width": 262,
+        "color": 6
+      },
+      "id": "27b6edaa-6673-4246-93e5-bce7fea0045c",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        14224,
+        13216
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "1. Re-attach PDF to extracted data\n\n2. Why used:\nAI & validation work on JSON\nGoogle Drive upload needs binary\nBinary gets lost during processing\n\n3. What it does:\nInput 1 → JSON (invoice data)\nInput 2 → Binary (PDF)\nOutput → BOTH together",
+        "height": 552,
+        "width": 310
+      },
+      "id": "7e32164d-5e2a-48bd-8fea-1f24062b2e68",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11792,
+        13184
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Converts AI’s raw text output into strict, structured JSON. \n\n2. Why it’s used (CRITICAL)\n\nAI may add explanations or extra text\nSystems like Google Sheets and ERP require clean JSON\nPrevents workflow failures.",
+        "height": 552,
+        "width": 278
+      },
+      "id": "50e03153-93d9-4f7c-848a-37f52b2d8fa5",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11824,
+        13872
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "1. Uploads the original invoice PDF to Google Drive.\n\n2.  Why it’s used:\nCentralized invoice storage\nAudit and compliance\nEasy retrieval and review",
+        "height": 552,
+        "width": 326,
+        "color": 3
+      },
+      "id": "3b01ad49-9e5f-425e-9bee-7647771fb34b",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        12176,
+        13184
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Updates invoice data in an existing database row instead of adding a new one. \n\n2.  Why it is used (short)\nTo avoid duplicate invoices\nTo update existing invoice data\nTo support ERP / accounting systems\nTo ensure audit-safe data storage\n\n3. What it stores (same fields, better system):\nInvoice Number (unique key), Vendor Name, Invoice Date, Subtotal, Tax Amount, Total Amount, Currency.",
+        "height": 584,
+        "width": 278,
+        "color": 4
+      },
+      "id": "10b5c59d-fd1e-4782-b107-c70a39f0f70b",
+      "name": "Sticky Note13",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        12176,
+        13872
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Store Raw Form Data\nStores metadata about the submission.\n\n2. Why used:\nThis step stores the original submission information (metadata) from the invoice upload form exactly as received\nTrack file metadata (name, size, type)\n\n3. Why LAST only:\nGoogle Sheets removes binary\nNo binary needed anymore here.",
+        "height": 584,
+        "width": 278
+      },
+      "id": "522c5d5f-a2a1-4c04-9672-cb3ab99a3ef0",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        12544,
+        13872
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst output = [];\n\nfor (const item of items) {\n  try {\n    const aiResponse = item.json.candidates?.[0]?.content?.parts?.[0]?.text || '';\n\n    const jsonMatch = aiResponse.match(/\\{[\\s\\S]*\\}/);\n    if (!jsonMatch) continue;\n\n    const invoiceData = JSON.parse(jsonMatch[0]);\n\n    // Normalize invoice number\n    const invNoRaw =\n      invoiceData?.invoiceNumber ??\n      invoiceData?.invoiceNo ??\n      invoiceData?.invoice_no ??\n      null;\n\n    const invoiceNumber =\n      invNoRaw !== null && invNoRaw !== undefined && String(invNoRaw).trim() !== ''\n        ? String(invNoRaw).trim()\n        : null;\n\n    // 🚨 CRITICAL PART: DROP ITEM IF invoiceNumber IS MISSING\n    if (!invoiceNumber) {\n      continue; // ⬅️ THIS STOPS THE ERROR\n    }\n\n    output.push({\n      json: {\n        invoiceNumber,\n        vendorName: String(invoiceData?.vendorName ?? '').trim(),\n        invoiceDate: String(invoiceData?.invoiceDate ?? '').trim(),\n        subtotal: Number(invoiceData?.subtotal ?? 0),\n        taxAmount: Number(invoiceData?.taxAmount ?? 0),\n        totalAmount: Number(invoiceData?.totalAmount ?? 0),\n        currency: String(invoiceData?.currency ?? '').trim()\n      },\n      binary: item.binary || {}\n    });\n\n  } catch (e) {\n    // On any error → DROP ITEM (no output)\n    continue;\n  }\n}\n\nreturn output;\n\n\n\n"
+      },
+      "id": "fd4e8fda-bcea-4d0a-824d-82188a66ec74",
+      "name": "Parse AI Response to Clean JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11920,
+        13904
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "✅ Invoice Submitted Successfully ",
+        "completionMessage": "Your invoice has been processed and recorded.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        13040,
+        13904
+      ],
+      "id": "5a7429c7-65a5-4bec-b22a-afc1fa45a426",
+      "name": "Success Page Form",
+      "webhookId": "cfbccf48-d40e-4b55-8cc0-bcbe34f14c31"
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "name",
+          "value": "invoices"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "invoiceNumber",
+              "value": "={{ $json.invoiceNumber }}"
+            },
+            {
+              "column": "vendorName",
+              "value": "={{ $json.vendorName }}"
+            },
+            {
+              "column": "invoiceDate",
+              "value": "={{ $json.invoiceDate }}"
+            },
+            {
+              "column": "subtotal",
+              "value": "={{ $json.subtotal }}"
+            },
+            {
+              "column": "taxAmount",
+              "value": "={{ $json.taxAmount }}"
+            },
+            {
+              "column": "totalAmount",
+              "value": "={{ $json.totalAmount }}"
+            },
+            {
+              "column": "currency",
+              "value": "={{ $json.currency }}"
+            },
+            {
+              "column": "uploadedAt",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {
+          "connectionTimeoutMillis": 30
+        }
+      },
+      "id": "e62edb8a-80c4-48b1-9ee9-3f69835a75bc",
+      "name": "Insert Invoice into MySQL",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        14000,
+        13232
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "0dswz0kia0TJgt92",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        14000,
+        13680
+      ],
+      "id": "f5d47575-2013-40d6-9dbb-aee27a8a2b55",
+      "name": "Insert documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "17nK63KfWFs0uwvN",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "invoices",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "invoiceNumber",
+              "condition": "eq",
+              "keyValue": "={{$json.invoiceNumber}}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "invoiceNumber",
+              "fieldValue": "={{$json.invoiceNumber}}"
+            },
+            {
+              "fieldId": "vendorName",
+              "fieldValue": "={{$json.vendorName}}"
+            },
+            {
+              "fieldId": "invoiceDate",
+              "fieldValue": "={{$json.invoiceDate}}"
+            },
+            {
+              "fieldId": "subtotal",
+              "fieldValue": "={{$json.subtotal}}"
+            },
+            {
+              "fieldId": "taxAmount",
+              "fieldValue": "={{$json.taxAmount}}"
+            },
+            {
+              "fieldId": "totalAmount",
+              "fieldValue": "={{$json.totalAmount}}"
+            },
+            {
+              "fieldId": "currency",
+              "fieldValue": "={{$json.currency}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14000,
+        13472
+      ],
+      "id": "4b29fb76-3e61-4b56-9d8c-a0cd7d3b2ac9",
+      "name": "Create a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "JXF9tpxn8rgaNtcr",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "invoices",
+          "mode": "list",
+          "cachedResultName": "invoices"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "taxAmount": "={{ Number($input.item.json.taxAmount ?? 0) }}",
+            "totalAmount": "={{ Number($input.item.json.totalAmount ?? 0) }}",
+            "invoiceNumber": "={{ $input.item.json.invoiceNumber }}",
+            "vendorName": "={{ $input.item.json.vendorName }}",
+            "invoiceDate": "={{ new Date($input.item.json.invoiceDate).toISOString().slice(0,10) }}",
+            "subtotal": "={{ Number($input.item.json.subtotal ?? 0) }}",
+            "currency": "={{ $input.item.json.currency ?? 'USD' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "invoiceNumber",
+              "displayName": "invoiceNumber",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "vendorName",
+              "displayName": "vendorName",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "invoiceDate",
+              "displayName": "invoiceDate",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subtotal",
+              "displayName": "subtotal",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "taxAmount",
+              "displayName": "taxAmount",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "totalAmount",
+              "displayName": "totalAmount",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency",
+              "displayName": "currency",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        12272,
+        13904
+      ],
+      "id": "aa857415-a306-4822-9d6f-f82faadbeb0a",
+      "name": "Update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "fQUSRVXxA9s7XSUj",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Adds invoice data as a new row in a Google Sheet.\n\n2. Why used:\nStore processed invoice data\nReporting & reconciliation\nCan sync later with SAP / Tally / ERP\nWhat it stores:\nInvoice Number\nVendor Name\nDate\nSubtotal\nTax\nTotal\nCurrency",
+        "height": 552,
+        "width": 246,
+        "color": 4
+      },
+      "id": "eefc8059-5dee-47d6-9a60-5e2bb41a4a9e",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        14544,
+        13216
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Invoice Submission Form": {
+      "main": [
+        [
+          {
+            "node": "Merge Invoice Data with Binary",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Extract Text from Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Invoice Data with Binary": {
+      "main": [
+        [
+          {
+            "node": "Upload Invoice to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text from Invoice": {
+      "main": [
+        [
+          {
+            "node": "Extract Invoice Data with AI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Invoice Data with AI1": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response to Clean JSON",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Invoice Data with Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response to Clean JSON": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Raw Form Data": {
+      "main": [
+        [
+          {
+            "node": "Success Page Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update rows in a table": {
+      "main": [
+        [
+          {
+            "node": "Store Raw Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "edf2dac1-2635-45e2-b047-9821b7c98790",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6dccd216326a4b9babf27c39dfce471b3fba8cb2e7f124c62c557dab5cc2c6fe"
+  },
+  "id": "MMrXbJRDDCUUWRsQ",
+  "tags": []
+}
