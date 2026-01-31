@@ -86,7 +86,7 @@ Designed for **scalable, real-world finance operations**.
 
 ---  
 
-🗄️ Database Schema – Short Explanation
+## 🗄️ Database Schema – Short Explanation
 
 This table stores processed invoice details from the OCR + AI workflow.
 
@@ -101,7 +101,7 @@ This table stores processed invoice details from the OCR + AI workflow.
 
 --- 
 
-⚙️ How to Use
+## ⚙️ How to Use
 
 Import the workflow JSON into n8n
 
@@ -115,7 +115,7 @@ Configure:
 
 --- 
 
-📈 Use Cases
+## 📈 Use Cases
 
 1. Accounts Payable Automation
 2. Finance Process Automation
