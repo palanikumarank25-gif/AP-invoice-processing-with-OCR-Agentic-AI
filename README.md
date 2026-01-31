@@ -91,12 +91,12 @@ Designed for **scalable, real-world finance operations**.
 Import the workflow JSON into n8n
 
 Configure:
-OpenAI credentials
-PostgreSQL credentials
-Google Drive credentials
-Activate the workflow
-Upload an invoice
-Automation runs end-to-end 
+1. OpenAI credentials
+2. PostgreSQL credentials
+3. Google Drive credentials
+4. Activate the workflow
+5. Upload an invoice
+6. Automation runs end-to-end 
 
 --- 
 
@@ -115,9 +115,3 @@ CREATE TABLE invoices (
 );
 
 ---
-
-
-
-
-
-
