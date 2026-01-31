@@ -84,7 +84,21 @@ Designed for **scalable, real-world finance operations**.
 9. **Success Page**  
    Confirm successful processing
 
----
+--- 
+
+⚙️ How to Use
+
+Import the workflow JSON into n8n
+
+Configure:
+OpenAI credentials
+PostgreSQL credentials
+Google Drive credentials
+Activate the workflow
+Upload an invoice
+Automation runs end-to-end 
+
+--- 
 
 ## 🗄️ Database Schema (PostgreSQL)
 
@@ -102,14 +116,8 @@ CREATE TABLE invoices (
 
 ---
 
-⚙️ How to Use
 
-Import the workflow JSON into n8n
 
-Configure:
-OpenAI credentials
-PostgreSQL credentials
-Google Drive credentials
-Activate the workflow
-Upload an invoice
-Automation runs end-to-end
+
+
+
