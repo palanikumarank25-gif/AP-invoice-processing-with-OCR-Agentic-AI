@@ -84,6 +84,21 @@ Designed for **scalable, real-world finance operations**.
 9. **Success Page**  
    Confirm successful processing
 
+---  
+
+🗄️ Database Schema – Short Explanation
+
+This table stores processed invoice details from the OCR + AI workflow.
+
+1. Invoice Number: Unique ID to avoid duplicate invoices
+2. Vendor Name: Supplier who issued the invoice
+3. Invoice Date: Date on the invoice
+4. Subtotal: Amount before tax
+5. Tax Amount: Total tax charged
+6. Total Amount: Final payable amount
+7. Currency: Currency used in the invoice
+8. Created At: When the record was saved in the system 
+
 --- 
 
 ⚙️ How to Use
@@ -100,18 +115,12 @@ Configure:
 
 --- 
 
-## 🗄️ Database Schema (PostgreSQL)
+📈 Use Cases
 
-```sql
-CREATE TABLE invoices (
-  invoiceNumber VARCHAR(50) PRIMARY KEY,
-  vendorName VARCHAR(255),
-  invoiceDate DATE,
-  subtotal NUMERIC,
-  taxAmount NUMERIC,
-  totalAmount NUMERIC,
-  currency VARCHAR(10),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+1. Accounts Payable Automation
+2. Finance Process Automation
+3. Invoice Digitization
+4. ERP Pre-processing
+5. Audit-ready Invoice Management
 
----
+--- 
