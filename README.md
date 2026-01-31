@@ -1,104 +1,101 @@
-# AP invoice processing with OCR Agentic AI🤖:
+# 📄 AP Invoice Processing with OCR Agentic AI 🤖
 
-🚀 Project Overview
+An end-to-end **Accounts Payable (AP) Invoice Processing system** built using **n8n**, **OCR**, and **Agentic AI** to automatically extract, validate, and store invoice data with minimal human intervention.
+
+---
+
+## 🚀 Project Overview
 
 This project automates the complete AP invoice workflow:
 
-Upload invoice (PDF/Image)
+- Upload invoice (PDF/Image)
+- Extract text using OCR
+- Use AI to understand & structure invoice data
+- Validate critical fields
+- Store clean data in a database
+- Upload invoice to Google Drive
+- Handle duplicates & errors gracefully
 
-Extract text using OCR
+Designed for **scalable, real-world finance operations**.
 
-Use AI to understand & structure invoice data
+---
 
-Validate critical fields
+## 🧠 Key Features
 
-Store clean data in a database
+- Invoice submission form  
+- OCR text extraction from invoices  
+- AI-based invoice data extraction  
+- Structured JSON parsing  
+- Duplicate invoice detection  
+- Database storage (PostgreSQL)  
+- Google Drive upload  
+- End-to-end automated workflow  
+- Production-ready Agentic AI design  
 
-Upload invoice to Google Drive
+---
 
-Handle duplicates & errors gracefully
+## 🛠️ Tech Stack
 
-Designed for scalable, real-world finance operations.
+- **n8n** – Workflow automation  
+- **OCR** – Invoice text extraction  
+- **OpenAI / LLM** – Invoice understanding & structuring  
+- **PostgreSQL** – Invoice data storage  
+- **Google Drive API** – File storage  
+- **JSON Schema** – Data validation  
 
-🧠 Key Features
+---
 
-✅ Invoice submission form
-✅ OCR text extraction from invoices
-✅ AI-based invoice data extraction
-✅ Structured JSON parsing
-✅ Duplicate invoice detection
-✅ Database storage (PostgreSQL)
-✅ Google Drive upload
-✅ End-to-end automated workflow
-✅ Production-ready Agentic AI design
+## 🔄 Workflow Architecture
 
-🛠️ Tech Stack
+### Step-by-Step Flow
 
-n8n – Workflow automation
+1. **Invoice Submission Form**  
+   User uploads invoice (PDF/Image)
 
-OCR – Invoice text extraction
+2. **Extract Text from Invoice**  
+   OCR extracts raw text
 
-OpenAI / LLM – Invoice understanding & structuring
+3. **Extract Invoice Data with AI**  
+   AI extracts:
+   - Invoice Number  
+   - Vendor Name  
+   - Invoice Date  
+   - Subtotal  
+   - Tax Amount  
+   - Total Amount  
+   - Currency  
 
-PostgreSQL – Invoice data storage
+4. **Merge Invoice Data**  
+   Combine OCR + AI outputs
 
-Google Drive API – File storage
+5. **Parse AI Response to Clean JSON**  
+   Convert AI output to structured JSON
 
-JSON Schema – Data validation
+6. **Upload Invoice to Google Drive**  
+   Store original invoice securely
 
-🔄 Workflow Architecture
-Step-by-Step Flow
+7. **Invoice Data Store (Database)**  
+   Save clean invoice data to PostgreSQL  
+   Prevent duplicate invoices
 
-Invoice Submission Form
+8. **Store Raw Form Data**  
+   Keep raw submission for audit
 
-User uploads invoice (PDF/Image)
+9. **Success Page**  
+   Confirm successful processing
 
-Extract Text from Invoice
+---
 
-OCR extracts raw text
+## 🗄️ Database Schema (PostgreSQL)
 
-Extract Invoice Data with AI
-
-AI reads OCR text
-
-Extracts:
-
-Invoice Number
-
-Vendor Name
-
-Invoice Date
-
-Subtotal
-
-Tax Amount
-
-Total Amount
-
-Currency
-
-Merge Invoice Data
-
-Combine OCR + AI outputs
-
-Parse AI Response to Clean JSON
-
-Convert AI output to structured JSON
-
-Upload Invoice to Google Drive
-
-Store original invoice securely
-
-Invoice Data Store (Database)
-
-Save clean invoice data to PostgreSQL
-
-Prevent duplicate invoices
-
-Store Raw Form Data
-
-Keep raw submission for audit
-
-Success Page
-
-Confirm successful processing
+```sql
+CREATE TABLE invoices (
+  invoiceNumber VARCHAR(50) PRIMARY KEY,
+  vendorName VARCHAR(255),
+  invoiceDate DATE,
+  subtotal NUMERIC,
+  taxAmount NUMERIC,
+  totalAmount NUMERIC,
+  currency VARCHAR(10),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
