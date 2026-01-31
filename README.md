@@ -1,4 +1,4 @@
-# 📄 AP Invoice Processing with OCR Agentic AI 🤖
+# AP Invoice Processing with OCR Agentic AI 🤖
 
 An end-to-end **Accounts Payable (AP) Invoice Processing system** built using **n8n**, **OCR**, and **Agentic AI** to automatically extract, validate, and store invoice data with minimal human intervention.
 
@@ -99,3 +99,15 @@ CREATE TABLE invoices (
   currency VARCHAR(10),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+## ⚙️ How to Use
+
+Import the workflow JSON into n8n
+
+Configure:
+1. OpenAI credentials
+2. PostgreSQL credentials
+3. Google Drive credentials
+4. Activate the workflow
+5. Upload an invoice
+6. Automation runs end-to-end
