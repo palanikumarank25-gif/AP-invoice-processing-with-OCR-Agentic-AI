@@ -100,14 +100,16 @@ CREATE TABLE invoices (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-## ⚙️ How to Use
+---
+
+⚙️ How to Use
 
 Import the workflow JSON into n8n
 
 Configure:
-1. OpenAI credentials
-2. PostgreSQL credentials
-3. Google Drive credentials
-4. Activate the workflow
-5. Upload an invoice
-6. Automation runs end-to-end
+OpenAI credentials
+PostgreSQL credentials
+Google Drive credentials
+Activate the workflow
+Upload an invoice
+Automation runs end-to-end
